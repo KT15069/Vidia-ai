@@ -62,7 +62,7 @@ const LoginPage: React.FC = () => {
 
   return (
     <AnimatedPage className="bg-light-bg dark:bg-dark-bg min-h-screen flex items-center justify-center p-4">
-      <div className="absolute inset-0 h-full w-full bg-gradient-to-br from-white to-neutral-200 dark:from-black dark:to-neutral-900 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+      <div className="absolute inset-0 h-full w-full bg-white dark:bg-black bg-[linear-gradient(to_right,rgba(128,128,128,0.12)_1px,transparent_1px),linear-gradient(to_bottom,rgba(128,128,128,0.12)_1px,transparent_1px)] bg-[size:24px_24px]"></div>
       <motion.div
         initial={{ opacity: 0, y: 20, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}

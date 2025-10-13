@@ -63,7 +63,7 @@ const LandingPage: React.FC = () => {
   return (
     <AnimatedPage className="bg-light-bg dark:bg-dark-bg text-black dark:text-white overflow-x-hidden">
         {/* Background Grid */}
-        <div className="absolute inset-0 h-full w-full bg-white dark:bg-black bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+        <div className="absolute inset-0 h-full w-full bg-white dark:bg-black bg-[linear-gradient(to_right,rgba(128,128,128,0.12)_1px,transparent_1px),linear-gradient(to_bottom,rgba(128,128,128,0.12)_1px,transparent_1px)] bg-[size:24px_24px]"></div>
       
         {/* --- Hero Section --- */}
         <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-6">
