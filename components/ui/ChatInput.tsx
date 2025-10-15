@@ -54,58 +54,66 @@ const ChatInput: React.FC = () => {
     setFileError(null);
 
     try {
-        const formData = new FormData();
-        formData.append('prompt', prompt);
-        if (file) {
-            formData.append('file', file);
-        }
-        formData.append('generationType', generationType);
+      const webhookUrl = 'https://mastersunionai.app.n8n.cloud/webhook/vidiai-media-generator';
 
-        const response = await fetch('https://mastersunionai.app.n8n.cloud/webhook/vidiai-media-generator', {
-            method: 'POST',
-            body: formData,
-        });
+      const formData = new FormData();
+      formData.append('prompt', prompt);
+      formData.append('generationType', generationType);
+      if (file) {
+        formData.append('file', file);
+      }
 
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`Webhook request failed: ${response.status} ${errorText}`);
-        }
-        
-        const result = await response.json();
-        
-        if (result.url && typeof result.url === 'string') {
-            const newItem = {
-                type: generationType,
-                prompt: prompt,
-                url: result.url,
-            };
-            await addGeneratedItem(newItem);
-        } else if (result.text && typeof result.text === 'string') {
-            const newItem = {
-                type: 'Text' as const,
-                prompt: prompt,
-                url: `text:${result.text}`,
-            };
-            await addGeneratedItem(newItem);
-        } else if (result.json && typeof result.json === 'object') {
-             const newItem = {
-                type: 'Text' as const,
-                prompt: prompt,
-                url: `text:${JSON.stringify(result.json, null, 2)}`,
-            };
-            await addGeneratedItem(newItem);
-        } else {
-            console.error("Webhook response was successful but format is not recognized.", result);
-            throw new Error('Invalid response from generation service.');
-        }
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        body: formData,
+      });
 
-        setPrompt('');
-        removeFile();
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Webhook request failed: ${response.status} ${errorText}`);
+      }
+
+      const result = await response.json();
+
+      if (result.url && typeof result.url === 'string') {
+        const newItem = {
+          type: generationType,
+          prompt: prompt,
+          url: result.url,
+        };
+        await addGeneratedItem(newItem);
+      } else if (result.text && typeof result.text === 'string') {
+        const newItem = {
+          type: 'Text' as const,
+          prompt: prompt,
+          url: `text:${result.text}`,
+        };
+        await addGeneratedItem(newItem);
+      } else if (result.json && typeof result.json === 'object') {
+        const newItem = {
+          type: 'Text' as const,
+          prompt: prompt,
+          url: `text:${JSON.stringify(result.json, null, 2)}`,
+        };
+        await addGeneratedItem(newItem);
+      } else {
+        console.error("Webhook response was successful but format is not recognized.", result);
+        throw new Error('Invalid response from generation service.');
+      }
+
+      setPrompt('');
+      removeFile();
     } catch (error: any) {
-        console.error('Generation failed:', error);
-        setFileError(error.message || 'Generation failed. Please try again.');
+      console.error('Generation failed:', error);
+      let errorMessage = 'Generation failed. Please try again.';
+      if (error.message.includes('Failed to fetch')) {
+          errorMessage = 'Network error: Failed to connect to the generation service. Please check your connection and try again.';
+      } else {
+          errorMessage = error.message || errorMessage;
+      }
+      setFileError(errorMessage);
     } finally {
-        setIsGenerating(false);
+      setIsGenerating(false);
     }
   };
   
