@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -6,6 +7,7 @@ import Button from '../components/ui/Button';
 import { MOCK_MEDIA_ITEMS } from '../constants';
 import { BrainCircuitIcon, DownloadIcon, SparklesIcon, ChevronDownIcon } from '../components/icons/Icons';
 import type { MediaItem } from '../types';
+import { GlowCard } from '../components/ui/spotlight-card';
 
 // Reusable component for section headers
 const SectionHeader: React.FC<{ title: string; subtitle: string }> = ({ title, subtitle }) => (
@@ -42,22 +44,27 @@ const InfiniteImageScroller: React.FC = () => {
     );
 };
 
-// Feature Card component
-const FeatureCard: React.FC<{ icon: React.ReactNode; title: string; description: string }> = ({ icon, title, description }) => (
-    <motion.div
-        variants={{
-            hidden: { opacity: 0, y: 20 },
-            visible: { opacity: 1, y: 0 },
-        }}
-        className="bg-light-card dark:bg-dark-card p-6 rounded-2xl border border-light-border dark:border-dark-border text-center"
-    >
-        <div className="inline-block p-3 bg-indigo-100 dark:bg-indigo-900/50 text-indigo-500 rounded-xl mb-4">
-            {icon}
-        </div>
-        <h3 className="text-xl font-semibold text-black dark:text-white">{title}</h3>
-        <p className="mt-2 text-neutral-500 dark:text-neutral-400">{description}</p>
-    </motion.div>
-);
+const features = [
+    {
+        icon: <BrainCircuitIcon className="w-8 h-8" />,
+        title: "Advanced AI Model",
+        description: "Leverage state-of-the-art AI to generate visuals with incredible detail and coherence.",
+        glowColor: "purple" as const,
+    },
+    {
+        icon: <SparklesIcon className="w-8 h-8" />,
+        title: "Image & Video",
+        description: "Create both static images and dynamic video clips from a single, intuitive interface.",
+        glowColor: "blue" as const,
+    },
+    {
+        icon: <DownloadIcon className="w-8 h-8" />,
+        title: "High-Resolution Exports",
+        description: "Download your creations in high quality, ready for any project or social media platform.",
+        glowColor: "green" as const,
+    },
+];
+
 
 const LandingPage: React.FC = () => {
   return (
@@ -129,21 +136,30 @@ const LandingPage: React.FC = () => {
                 subtitle="Vidia is packed with features to make your creative process seamless and inspiring."
             />
             <div className="mt-16 max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-                <FeatureCard 
-                    icon={<BrainCircuitIcon className="w-8 h-8"/>}
-                    title="Advanced AI Model"
-                    description="Leverage state-of-the-art AI to generate visuals with incredible detail and coherence."
-                />
-                <FeatureCard 
-                    icon={<SparklesIcon className="w-8 h-8"/>}
-                    title="Image & Video"
-                    description="Create both static images and dynamic video clips from a single, intuitive interface."
-                />
-                <FeatureCard 
-                    icon={<DownloadIcon className="w-8 h-8"/>}
-                    title="High-Resolution Exports"
-                    description="Download your creations in high quality, ready for any project or social media platform."
-                />
+                {features.map((feature, index) => (
+                     <motion.div
+                        key={index}
+                        variants={{
+                            hidden: { opacity: 0, y: 20 },
+                            visible: { opacity: 1, y: 0 },
+                        }}
+                        className="h-full"
+                    >
+                        <GlowCard 
+                            glowColor={feature.glowColor} 
+                            customSize={true} 
+                            className="p-6 text-center h-full !rounded-2xl"
+                        >
+                            <div className="flex flex-col items-center text-center">
+                                <div className="inline-block p-3 bg-indigo-100 dark:bg-indigo-900/50 text-indigo-500 rounded-xl mb-4">
+                                    {feature.icon}
+                                </div>
+                                <h3 className="text-xl font-semibold text-black dark:text-white">{feature.title}</h3>
+                                <p className="mt-2 text-neutral-500 dark:text-neutral-400">{feature.description}</p>
+                            </div>
+                        </GlowCard>
+                    </motion.div>
+                ))}
             </div>
         </motion.section>
 

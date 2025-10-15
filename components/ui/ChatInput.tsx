@@ -1,5 +1,3 @@
-
-
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { UploadIcon, ImageIcon, VideoIcon, SparklesIcon, XIcon, SpinnerIcon } from '../icons/Icons';
@@ -73,7 +71,6 @@ const ChatInput: React.FC = () => {
             throw new Error(`Webhook request failed: ${response.status} ${errorText}`);
         }
         
-        // Assuming the webhook returns a JSON response with a 'url' property
         const result = await response.json();
         const mediaUrl = result.url;
         
@@ -137,55 +134,81 @@ const ChatInput: React.FC = () => {
             )}
         </AnimatePresence>
         <form onSubmit={handleSubmit} className="relative group">
-          <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl blur opacity-0 group-focus-within:opacity-75 transition duration-500"></div>
-          <div className="relative flex items-center gap-2 p-2 bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border rounded-2xl shadow-2xl shadow-black/20 dark:shadow-black/50 transition-all duration-300 focus-within:shadow-indigo-500/50">
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleFileChange}
-              className="hidden"
-              accept="image/*,video/*"
-              disabled={isGenerating}
-            />
-            <button type="button" onClick={handleUploadClick} disabled={isGenerating} className="p-2 text-neutral-500 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-              <UploadIcon className="w-5 h-5" />
-            </button>
-            <input
-              type="text"
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              placeholder="Describe what you want to create..."
-              className="flex-grow bg-transparent text-black dark:text-neutral-100 placeholder-neutral-500 focus:outline-none disabled:opacity-50"
-              disabled={isGenerating}
-            />
-            <div className="flex items-center bg-light-bg dark:bg-dark-bg p-1 rounded-lg">
-              <button 
-                type="button"
-                onClick={() => setGenerationType('Image')}
-                className={`px-3 py-1 text-sm rounded-md transition-colors ${generationType === 'Image' ? 'bg-black dark:bg-white text-white dark:text-black' : 'text-neutral-500 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-700'}`}
-                disabled={isGenerating}
-              >
-                <ImageIcon className="w-4 h-4 inline-block mr-1" />
-                Image
-              </button>
-              <button 
-                type="button"
-                onClick={() => setGenerationType('Video')}
-                className={`px-3 py-1 text-sm rounded-md transition-colors ${generationType === 'Video' ? 'bg-black dark:bg-white text-white dark:text-black' : 'text-neutral-500 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-700'}`}
-                disabled={isGenerating}
-              >
-                <VideoIcon className="w-4 h-4 inline-block mr-1" />
-                Video
-              </button>
+            <div className="relative flex items-center justify-center group">
+                <div className="absolute z-[-1] overflow-hidden h-full w-full rounded-2xl blur-[3px] 
+                                before:absolute before:content-[''] before:z-[-2] before:w-[999px] before:h-[999px] before:bg-no-repeat before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:rotate-60
+                                before:bg-[conic-gradient(#000,#402fb5_5%,#000_38%,#000_50%,#cf30aa_60%,#000_87%)] before:transition-all before:duration-2000
+                                group-hover:before:rotate-[-120deg] group-focus-within:before:rotate-[420deg] group-focus-within:before:duration-[4000ms]">
+                </div>
+                <div className="absolute z-[-1] overflow-hidden h-full w-full rounded-2xl blur-[3px]
+                                before:absolute before:content-[''] before:z-[-2] before:w-[600px] before:h-[600px] before:bg-no-repeat before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:rotate-[82deg]
+                                before:bg-[conic-gradient(rgba(0,0,0,0),#18116a,rgba(0,0,0,0)_10%,rgba(0,0,0,0)_50%,#6e1b60,rgba(0,0,0,0)_60%)] before:transition-all before:duration-2000
+                                group-hover:before:rotate-[-98deg] group-focus-within:before:rotate-[442deg] group-focus-within:before:duration-[4000ms]">
+                </div>
+                <div className="absolute z-[-1] overflow-hidden h-full w-full rounded-2xl blur-[2px] 
+                                before:absolute before:content-[''] before:z-[-2] before:w-[600px] before:h-[600px] before:bg-no-repeat before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:rotate-[83deg]
+                                before:bg-[conic-gradient(rgba(0,0,0,0)_0%,#a099d8,rgba(0,0,0,0)_8%,rgba(0,0,0,0)_50%,#dfa2da,rgba(0,0,0,0)_58%)] before:brightness-125 dark:before:brightness-140
+                                before:transition-all before:duration-2000 group-hover:before:rotate-[-97deg] group-focus-within:before:rotate-[443deg] group-focus-within:before:duration-[4000ms]">
+                </div>
+                <div className="absolute z-[-1] overflow-hidden h-full w-full rounded-2xl blur-[0.5px]
+                                before:absolute before:content-[''] before:z-[-2] before:w-[600px] before:h-[600px] before:bg-no-repeat before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:rotate-70
+                                before:bg-[conic-gradient(#e2e8f0,#402fb5_5%,#e2e8f0_14%,#e2e8f0_50%,#cf30aa_60%,#e2e8f0_64%)] dark:before:bg-[conic-gradient(#1c191c,#402fb5_5%,#1c191c_14%,#1c191c_50%,#cf30aa_60%,#1c191c_64%)] before:brightness-100 dark:before:brightness-130
+                                before:transition-all before:duration-2000 group-hover:before:rotate-[-110deg] group-focus-within:before:rotate-[430deg] group-focus-within:before:duration-[4000ms]">
+                </div>
+
+                <div className="relative w-full">
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={handleFileChange}
+                        className="hidden"
+                        accept="image/*,video/*"
+                        disabled={isGenerating}
+                    />
+                    <input
+                        type="text"
+                        value={prompt}
+                        onChange={(e) => setPrompt(e.target.value)}
+                        placeholder="Describe what you want to create..."
+                        disabled={isGenerating}
+                        className="bg-light-card dark:bg-[#010201] border-none w-full h-16 rounded-xl text-black dark:text-white px-14 text-base focus:outline-none placeholder-neutral-500 dark:placeholder-gray-400"
+                    />
+                    <button type="button" onClick={handleUploadClick} disabled={isGenerating} className="absolute left-4 top-1/2 -translate-y-1/2 p-2 text-neutral-500 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                        <UploadIcon className="w-5 h-5" />
+                    </button>
+                    
+                    <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+                        <div className="flex items-center bg-light-bg dark:bg-dark-bg p-1 rounded-lg">
+                            <button 
+                                type="button"
+                                onClick={() => setGenerationType('Image')}
+                                className={`px-2.5 py-1.5 text-sm rounded-md transition-colors ${generationType === 'Image' ? 'bg-black dark:bg-white text-white dark:text-black' : 'text-neutral-500 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-700'}`}
+                                disabled={isGenerating}
+                                aria-label="Generate Image"
+                            >
+                                <ImageIcon className="w-4 h-4" />
+                            </button>
+                            <button 
+                                type="button"
+                                onClick={() => setGenerationType('Video')}
+                                className={`px-2.5 py-1.5 text-sm rounded-md transition-colors ${generationType === 'Video' ? 'bg-black dark:bg-white text-white dark:text-black' : 'text-neutral-500 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-700'}`}
+                                disabled={isGenerating}
+                                aria-label="Generate Video"
+                            >
+                                <VideoIcon className="w-4 h-4" />
+                            </button>
+                        </div>
+                        <button 
+                            type="submit"
+                            disabled={!prompt.trim() || isGenerating}
+                            className="p-2 w-10 h-10 flex items-center justify-center bg-black dark:bg-white text-white dark:text-black rounded-lg disabled:bg-neutral-200 dark:disabled:bg-neutral-600 disabled:text-neutral-400 dark:disabled:text-neutral-500 transition-colors"
+                            aria-label="Generate"
+                        >
+                            {isGenerating ? <SpinnerIcon className="w-5 h-5 animate-spin"/> : <SparklesIcon className="w-5 h-5" />}
+                        </button>
+                    </div>
+                </div>
             </div>
-            <button 
-              type="submit"
-              disabled={!prompt.trim() || isGenerating}
-              className="p-2 w-9 h-9 flex items-center justify-center bg-black dark:bg-white text-white dark:text-black rounded-lg disabled:bg-neutral-200 dark:disabled:bg-neutral-600 disabled:text-neutral-400 dark:disabled:text-neutral-500 transition-colors"
-            >
-              {isGenerating ? <SpinnerIcon className="w-5 h-5 animate-spin"/> : <SparklesIcon className="w-5 h-5" />}
-            </button>
-          </div>
         </form>
       </div>
     </motion.div>
