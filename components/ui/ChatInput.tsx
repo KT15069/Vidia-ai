@@ -61,7 +61,7 @@ const ChatInput: React.FC = () => {
         }
         formData.append('generationType', generationType);
 
-        const response = await fetch('http://localhost:5678/webhook-test/generate-image', {
+        const response = await fetch('https://mastersunionai.app.n8n.cloud/webhook/vidiai-media-generator', {
             method: 'POST',
             body: formData,
         });
@@ -72,19 +72,33 @@ const ChatInput: React.FC = () => {
         }
         
         const result = await response.json();
-        const mediaUrl = result.url;
         
-        if (!mediaUrl || typeof mediaUrl !== 'string') {
-             console.error("Webhook response was successful but didn't contain a valid URL.", result);
-             throw new Error('Invalid response from generation service.');
+        if (result.url && typeof result.url === 'string') {
+            const newItem = {
+                type: generationType,
+                prompt: prompt,
+                url: result.url,
+            };
+            await addGeneratedItem(newItem);
+        } else if (result.text && typeof result.text === 'string') {
+            const newItem = {
+                type: 'Text' as const,
+                prompt: prompt,
+                url: `text:${result.text}`,
+            };
+            await addGeneratedItem(newItem);
+        } else if (result.json && typeof result.json === 'object') {
+             const newItem = {
+                type: 'Text' as const,
+                prompt: prompt,
+                url: `text:${JSON.stringify(result.json, null, 2)}`,
+            };
+            await addGeneratedItem(newItem);
+        } else {
+            console.error("Webhook response was successful but format is not recognized.", result);
+            throw new Error('Invalid response from generation service.');
         }
 
-        const newItem = {
-            type: generationType,
-            prompt: prompt,
-            url: mediaUrl,
-        };
-        await addGeneratedItem(newItem);
         setPrompt('');
         removeFile();
     } catch (error: any) {
@@ -93,6 +107,24 @@ const ChatInput: React.FC = () => {
     } finally {
         setIsGenerating(false);
     }
+  };
+  
+  const handlePromptChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setPrompt(e.target.value);
+    const textarea = e.target;
+    textarea.style.height = 'auto'; // Reset height to recalculate based on content
+    textarea.style.height = `${textarea.scrollHeight}px`; // Set height to fit content
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault(); // Prevent new line on Enter
+      if (e.currentTarget.form) {
+        // Natively dispatch a submit event on the form
+        e.currentTarget.form.requestSubmit();
+      }
+    }
+    // Shift+Enter will create a new line by default
   };
 
   return (
@@ -165,13 +197,14 @@ const ChatInput: React.FC = () => {
                         accept="image/*,video/*"
                         disabled={isGenerating}
                     />
-                    <input
-                        type="text"
+                    <textarea
+                        rows={1}
                         value={prompt}
-                        onChange={(e) => setPrompt(e.target.value)}
+                        onChange={handlePromptChange}
+                        onKeyDown={handleKeyDown}
                         placeholder="Describe what you want to create..."
                         disabled={isGenerating}
-                        className="bg-light-card dark:bg-[#010201] border-none w-full h-16 rounded-xl text-black dark:text-white px-14 text-base focus:outline-none placeholder-neutral-500 dark:placeholder-gray-400"
+                        className="bg-light-card dark:bg-[#010201] border-none w-full min-h-[4rem] max-h-24 rounded-xl text-black dark:text-white pl-14 pr-36 py-5 text-base focus:outline-none placeholder-neutral-500 dark:placeholder-gray-400 resize-none overflow-y-auto"
                     />
                     <button type="button" onClick={handleUploadClick} disabled={isGenerating} className="absolute left-4 top-1/2 -translate-y-1/2 p-2 text-neutral-500 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                         <UploadIcon className="w-5 h-5" />

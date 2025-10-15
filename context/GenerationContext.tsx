@@ -6,6 +6,7 @@ import { useAuth } from './AuthContext';
 interface GenerationContextType {
   items: MediaItem[];
   loading: boolean;
+  hasGeneratedThisSession: boolean;
   addGeneratedItem: (item: Omit<MediaItem, 'id' | 'isFavorite'>) => Promise<void>;
   toggleFavorite: (id: number) => Promise<void>;
 }
@@ -16,6 +17,7 @@ export const GenerationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const { user } = useAuth();
   const [items, setItems] = useState<MediaItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [hasGeneratedThisSession, setHasGeneratedThisSession] = useState(false);
 
   useEffect(() => {
     const fetchGenerations = async () => {
@@ -68,6 +70,7 @@ export const GenerationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     } else if (data) {
        const formattedItem = { ...data, isFavorite: data.is_favorite };
        setItems((prevItems) => [formattedItem, ...prevItems]);
+       setHasGeneratedThisSession(true);
     }
   };
 
@@ -100,7 +103,7 @@ export const GenerationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     }
   };
 
-  const value = useMemo(() => ({ items, loading, addGeneratedItem, toggleFavorite }), [items, loading]);
+  const value = useMemo(() => ({ items, loading, hasGeneratedThisSession, addGeneratedItem, toggleFavorite }), [items, loading, hasGeneratedThisSession]);
 
   return (
     <GenerationContext.Provider value={value}>

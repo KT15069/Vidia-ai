@@ -4,6 +4,10 @@ import AnimatedPage from '../components/ui/AnimatedPage';
 import ChatInput from '../components/ui/ChatInput';
 import { staggerContainer, cardFadeIn } from '../utils/animations';
 import { MOCK_MEDIA_ITEMS } from '../constants';
+import { useGeneration } from '../context/GenerationContext';
+import MediaCard from '../components/ui/MediaCard';
+import TextCard from '../components/ui/TextCard';
+import { SparklesIcon } from '../components/icons/Icons';
 
 const EmptyStateWithBackground: React.FC = () => (
     <div className="relative h-full overflow-hidden">
@@ -50,9 +54,33 @@ const EmptyStateWithBackground: React.FC = () => (
 );
 
 const HomePage: React.FC = () => {
+  const { items, loading, hasGeneratedThisSession } = useGeneration();
+
   return (
-    <AnimatedPage className="relative h-full">
-      <EmptyStateWithBackground />
+    <AnimatedPage className="h-full flex flex-col">
+      <div className="flex-1 overflow-y-auto relative pb-36">
+        {loading ? (
+          <div className="absolute inset-0 flex items-center justify-center text-neutral-500">
+              <SparklesIcon className="w-10 h-10 mx-auto animate-pulse" />
+          </div>
+        ) : (hasGeneratedThisSession && items.length > 0) ? (
+          <motion.div
+              key="generations-list"
+              variants={staggerContainer}
+              initial="hidden"
+              animate="visible"
+              className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-4 space-y-4 p-4 sm:p-6 lg:p-8"
+          >
+              {items.map((item) => (
+                item.type === 'Text' 
+                ? <TextCard key={item.id} item={item} />
+                : <MediaCard key={item.id} item={item} />
+              ))}
+          </motion.div>
+        ) : (
+          <EmptyStateWithBackground />
+        )}
+      </div>
       <ChatInput />
     </AnimatedPage>
   );

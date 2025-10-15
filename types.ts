@@ -9,7 +9,7 @@ export interface NavItemType {
 
 export interface MediaItem {
   id: number;
-  type: 'Image' | 'Video';
+  type: 'Image' | 'Video' | 'Text';
   prompt: string;
   url: string;
   isFavorite?: boolean;

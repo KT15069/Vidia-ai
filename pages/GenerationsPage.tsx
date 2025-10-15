@@ -3,11 +3,12 @@ import { motion } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 import AnimatedPage from '../components/ui/AnimatedPage';
 import MediaCard from '../components/ui/MediaCard';
+import TextCard from '../components/ui/TextCard';
 import { useGeneration } from '../context/GenerationContext';
 import { staggerContainer } from '../utils/animations';
 import { SparklesIcon } from '../components/icons/Icons';
 
-type FilterType = 'All' | 'Image' | 'Video';
+type FilterType = 'All' | 'Image' | 'Video' | 'Text';
 
 const GenerationsPage: React.FC = () => {
   const [filter, setFilter] = useState<FilterType>('All');
@@ -37,7 +38,7 @@ const GenerationsPage: React.FC = () => {
       </div>
       
       <div className="flex items-center gap-2 mb-8">
-        {(['All', 'Image', 'Video'] as FilterType[]).map((f) => (
+        {(['All', 'Image', 'Video', 'Text'] as FilterType[]).map((f) => (
           <button
             key={f}
             onClick={() => setFilter(f)}
@@ -66,7 +67,9 @@ const GenerationsPage: React.FC = () => {
             className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-4 space-y-4"
         >
             {filteredItems.map((item) => (
-            <MediaCard key={item.id} item={item} />
+              item.type === 'Text'
+              ? <TextCard key={item.id} item={item} />
+              : <MediaCard key={item.id} item={item} />
             ))}
         </motion.div>
       ) : (
