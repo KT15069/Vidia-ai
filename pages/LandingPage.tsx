@@ -68,9 +68,9 @@ const features = [
 
 const LandingPage: React.FC = () => {
   return (
-    <AnimatedPage className="bg-light-bg dark:bg-dark-bg text-black dark:text-white overflow-x-hidden">
+    <AnimatedPage className="relative bg-light-bg dark:bg-dark-bg text-black dark:text-white overflow-x-hidden">
         {/* Background Grid */}
-        <div className="absolute inset-0 h-full w-full bg-white dark:bg-black bg-[linear-gradient(to_right,rgba(128,128,128,0.12)_1px,transparent_1px),linear-gradient(to_bottom,rgba(128,128,128,0.12)_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+        <div className="absolute inset-0 w-full bg-white dark:bg-black bg-[linear-gradient(to_right,rgba(128,128,128,0.12)_1px,transparent_1px),linear-gradient(to_bottom,rgba(128,128,128,0.12)_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:linear-gradient(to_bottom,black_80%,transparent_100%)]"></div>
       
         {/* --- Hero Section --- */}
         <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-6">
@@ -133,7 +133,7 @@ const LandingPage: React.FC = () => {
         >
             <SectionHeader 
                 title="Powerful, Simple, Fast."
-                subtitle="Vidia is packed with features to make your creative process seamless and inspiring."
+                subtitle="Rivora is packed with features to make your creative process seamless and inspiring."
             />
             <div className="mt-16 max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
                 {features.map((feature, index) => (
@@ -173,7 +173,7 @@ const LandingPage: React.FC = () => {
             >
                 <SectionHeader 
                     title="Ready to bring your vision to life?"
-                    subtitle="Join thousands of creators and start your journey with Vidia today."
+                    subtitle="Join thousands of creators and start your journey with Rivora today."
                 />
                 <Link to="/home" className="mt-10 inline-block">
                     <Button variant="primary" className="text-lg px-8 py-4">Get Started Now</Button>

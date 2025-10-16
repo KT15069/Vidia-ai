@@ -1,11 +1,11 @@
 import React from 'react';
-import { motion, type HTMLMotionProps } from 'framer-motion';
+import { motion, MotionProps } from 'framer-motion';
 
-// FIX: Extend HTMLMotionProps<'button'> instead of React.ButtonHTMLAttributes to resolve type conflicts
-// for props like `onAnimationStart` when they are spread onto a motion component.
-interface ButtonProps extends HTMLMotionProps<'button'> {
+// FIX: Corrected ButtonProps to properly include children and other HTML attributes.
+// The previous type definition using React.ComponentProps<typeof motion.button> was failing to infer these props,
+// leading to type errors. The new type explicitly combines React's button attributes with framer-motion's props for robust typing.
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, MotionProps {
   variant?: 'primary' | 'secondary' | 'ghost';
-  children: React.ReactNode;
 }
 
 const Button: React.FC<ButtonProps> = ({ children, variant = 'primary', className = '', ...props }) => {

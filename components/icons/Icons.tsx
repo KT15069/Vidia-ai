@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 type IconProps = { className?: string };
@@ -60,8 +59,8 @@ export const MoonIcon: React.FC<IconProps> = (props) => (
 );
 
 export const LogoIcon: React.FC<IconProps> = (props) => (
-    <svg {...props} viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <path d="M20 20 L50 80 L80 20 L65 20 L50 50 L35 20 Z" fill="currentColor"/>
+    <svg {...props} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path fillRule="evenodd" clipRule="evenodd" d="M8 3H14C17.3137 3 20 5.68629 20 9C20 12.3137 17.3137 15 14 15H11.5L17 21H14L9.5 15V21H8V3ZM11 6V12H14C15.6569 12 17 10.6569 17 9C17 7.34315 15.6569 6 14 6H11Z"/>
     </svg>
 );
 

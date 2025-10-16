@@ -64,7 +64,8 @@ const GlowCard: React.FC<GlowCardProps> = ({
   };
 
   const getInlineStyles = () => {
-    const baseStyles: React.CSSProperties = {
+    // FIX: Add an index signature to allow CSS custom properties (e.g., '--base') in the style object.
+    const baseStyles: React.CSSProperties & { [key: `--${string}`]: string | number } = {
       '--base': base,
       '--spread': spread,
       '--radius': '14',

@@ -40,8 +40,8 @@ const Sidebar: React.FC<{ isCollapsed: boolean }> = ({ isCollapsed }) => {
             className={`fixed top-0 left-0 h-full bg-light-card dark:bg-dark-card border-r border-light-border dark:border-dark-border flex flex-col p-4 z-30 transition-all duration-300 ${isCollapsed ? 'w-20' : 'w-64'}`}
         >
             <div className={`flex items-center gap-2 px-4 mb-8 ${isCollapsed ? '!px-0 justify-center' : ''}`}>
-                <LogoIcon className="w-8 h-8 text-black dark:text-white flex-shrink-0" />
-                {!isCollapsed && <h1 className="text-xl font-bold text-black dark:text-white">Vidia</h1>}
+                <LogoIcon className="w-8 h-8 flex-shrink-0" />
+                {!isCollapsed && <h1 className="text-xl font-bold text-black dark:text-white">Rivora</h1>}
             </div>
             <nav className="flex-1 flex flex-col gap-2">
                 {NAV_ITEMS.map((item) => (

@@ -32,8 +32,8 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen, toggleSid
                 </button>
             </div>
             <div className="flex items-center gap-2 absolute left-1/2 -translate-x-1/2">
-                <LogoIcon className="w-8 h-8 text-black dark:text-white" />
-                <h1 className="text-xl font-bold text-black dark:text-white">Vidia</h1>
+                <LogoIcon className="w-8 h-8" />
+                <h1 className="text-xl font-bold text-black dark:text-white">Rivora</h1>
             </div>
         </>
     );

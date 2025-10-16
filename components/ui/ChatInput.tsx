@@ -54,7 +54,7 @@ const ChatInput: React.FC = () => {
     setFileError(null);
 
     try {
-      const webhookUrl = 'https://mastersunionai.app.n8n.cloud/webhook/vidiai-media-generator';
+      const webhookUrl = 'https://mastersunionai.app.n8n.cloud/webhook/rivora-media-generator';
 
       const formData = new FormData();
       formData.append('prompt', prompt);
@@ -140,7 +140,7 @@ const ChatInput: React.FC = () => {
       initial={{ y: 100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ delay: 0.5, duration: 0.6, ease: 'easeOut' }}
-      className="fixed bottom-0 left-0 right-0 p-4 z-20"
+      className="p-4"
     >
       <div className="max-w-3xl mx-auto">
         <AnimatePresence>
