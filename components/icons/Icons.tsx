@@ -59,8 +59,15 @@ export const MoonIcon: React.FC<IconProps> = (props) => (
 );
 
 export const LogoIcon: React.FC<IconProps> = (props) => (
-    <svg {...props} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-        <path fillRule="evenodd" clipRule="evenodd" d="M8 3H14C17.3137 3 20 5.68629 20 9C20 12.3137 17.3137 15 14 15H11.5L17 21H14L9.5 15V21H8V3ZM11 6V12H14C15.6569 12 17 10.6569 17 9C17 7.34315 15.6569 6 14 6H11Z"/>
+    <svg {...props} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <linearGradient id="logoGradientIcon" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#A855F7" />
+                <stop offset="100%" stopColor="#6366F1" />
+            </linearGradient>
+        </defs>
+        <path d="M5 3C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H12C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3H5Z" fill="url(#logoGradientIcon)" opacity="0.5" />
+        <path d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21V16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8V3Z" fill="url(#logoGradientIcon)" />
     </svg>
 );
 

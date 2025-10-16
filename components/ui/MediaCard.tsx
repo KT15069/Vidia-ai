@@ -18,18 +18,34 @@ const MediaCard: React.FC<MediaCardProps> = ({ item }) => {
     toggleFavorite(item.id);
   };
 
+  const commonMediaClasses = "w-full h-auto object-cover transition-transform duration-500 ease-out group-hover:scale-105";
+
   return (
     <motion.div
       variants={cardFadeIn}
-      className="group relative block overflow-hidden rounded-2xl cursor-pointer"
+      className="group relative block overflow-hidden rounded-2xl cursor-pointer break-inside-avoid"
     >
-      <motion.img
-        src={item.url}
-        alt={item.prompt}
-        className="w-full h-auto object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-        width={400}
-        height={400}
-      />
+      {item.type === 'Video' ? (
+        <motion.video
+          src={item.url}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className={commonMediaClasses}
+          width={400}
+          height={400}
+          aria-label={item.prompt}
+        />
+      ) : (
+        <motion.img
+          src={item.url}
+          alt={item.prompt}
+          className={commonMediaClasses}
+          width={400}
+          height={400}
+        />
+      )}
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       
       <button

@@ -52,25 +52,45 @@ export const GenerationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   }, [user]);
 
   const addGeneratedItem = async (item: Omit<MediaItem, 'id' | 'isFavorite'>) => {
-    if (!user) return;
+    if (!user) {
+        throw new Error("You must be logged in to save generations.");
+    }
 
-    const newItem = {
+    // Create a temporary ID for immediate UI update
+    const tempId = Date.now();
+    const newItem: MediaItem = {
       ...item,
+      id: tempId,
+      isFavorite: false,
+    };
+
+    // Optimistically update the UI
+    setItems((prevItems) => [newItem, ...prevItems]);
+    setHasGeneratedThisSession(true);
+
+    // Prepare the data for the database (using snake_case for columns)
+    const newItemForDb = {
+      type: item.type,
+      prompt: item.prompt,
+      url: item.url,
       user_id: user.id,
+      is_favorite: false,
     };
     
-    const { data, error } = await supabase
+    // Perform the insert in the background.
+    // We remove the chained .select() to prevent a potential failure if the user's
+    // RLS policy for SELECT is missing or incorrect. The optimistic update
+    // ensures the UI is responsive, and the real data will be loaded on the next refresh.
+    const { error } = await supabase
       .from('generations')
-      .insert(newItem)
-      .select()
-      .single();
+      .insert(newItemForDb);
 
     if (error) {
-      console.error('Error adding item:', error.message);
-    } else if (data) {
-       const formattedItem = { ...data, isFavorite: data.is_favorite };
-       setItems((prevItems) => [formattedItem, ...prevItems]);
-       setHasGeneratedThisSession(true);
+      console.error('Error saving item to database:', error.message);
+      // If the save fails, roll back the optimistic update
+      setItems((prevItems) => prevItems.filter((i) => i.id !== tempId));
+      // Throw an error to be caught by the UI component
+      throw new Error(`Failed to save generation: ${error.message}`);
     }
   };
 

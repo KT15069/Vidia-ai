@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import AnimatedPage from '../components/ui/AnimatedPage';
 import Button from '../components/ui/Button';
 import { MOCK_MEDIA_ITEMS } from '../constants';
@@ -67,6 +67,12 @@ const features = [
 
 
 const LandingPage: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleNavigateHome = () => {
+    navigate('/home');
+  };
+
   return (
     <AnimatedPage className="relative bg-light-bg dark:bg-dark-bg text-black dark:text-white overflow-x-hidden">
         {/* Background Grid */}
@@ -98,9 +104,7 @@ const LandingPage: React.FC = () => {
                     transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
                     className="mt-10"
                 >
-                    <Link to="/home">
-                        <Button variant="primary" className="text-lg px-8 py-4">Start Creating Free</Button>
-                    </Link>
+                    <Button onClick={handleNavigateHome} variant="primary" className="text-lg px-8 py-4">Start Creating Free</Button>
                 </motion.div>
             </div>
             <motion.div
@@ -164,7 +168,7 @@ const LandingPage: React.FC = () => {
         </motion.section>
 
         {/* --- Final CTA Section --- */}
-        <section className="py-24 px-6 text-center bg-light-card/50 dark:bg-dark-card/50">
+        <section className="relative z-10 py-24 px-6 text-center bg-light-card/50 dark:bg-dark-card/50">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -175,9 +179,9 @@ const LandingPage: React.FC = () => {
                     title="Ready to bring your vision to life?"
                     subtitle="Join thousands of creators and start your journey with Rivora today."
                 />
-                <Link to="/home" className="mt-10 inline-block">
-                    <Button variant="primary" className="text-lg px-8 py-4">Get Started Now</Button>
-                </Link>
+                <div className="mt-10">
+                    <Button onClick={handleNavigateHome} variant="primary" className="text-lg px-8 py-4">Get Started Now</Button>
+                </div>
             </motion.div>
         </section>
 

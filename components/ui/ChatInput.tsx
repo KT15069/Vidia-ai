@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { UploadIcon, ImageIcon, VideoIcon, SparklesIcon, XIcon, SpinnerIcon } from '../icons/Icons';
@@ -54,7 +55,9 @@ const ChatInput: React.FC = () => {
     setFileError(null);
 
     try {
-      const webhookUrl = 'https://mastersunionai.app.n8n.cloud/webhook/rivora-media-generator';
+      const imageWebhookUrl = 'https://mastersunionai.app.n8n.cloud/webhook/519ae1a9-f9dd-49ac-b0dc-c4449ecd800f';
+      const videoWebhookUrl = 'https://mastersunionai.app.n8n.cloud/webhook/278b3185-571f-40cd-93d8-b6ec3528d0fe';
+      const webhookUrl = generationType === 'Image' ? imageWebhookUrl : videoWebhookUrl;
 
       const formData = new FormData();
       formData.append('prompt', prompt);
@@ -73,33 +76,49 @@ const ChatInput: React.FC = () => {
         throw new Error(`Webhook request failed: ${response.status} ${errorText}`);
       }
 
-      const result = await response.json();
+      const textResult = await response.text();
+      const trimmedResult = textResult.trim();
+      let newItem;
 
-      if (result.url && typeof result.url === 'string') {
-        const newItem = {
-          type: generationType,
-          prompt: prompt,
-          url: result.url,
+      const isUrl = (text: string): boolean => {
+        if (!text) return false;
+        try {
+            new URL(text);
+            return text.startsWith('http://') || text.startsWith('https://');
+        } catch (e) {
+            return false;
+        }
+      };
+      
+      // To be open to all responses, we will be smart but default to safety.
+      // If an Image generation returns a valid URL, we'll render it as an image.
+      // For every other case (Video generations, non-URL Image responses, JSON, empty responses, etc.),
+      // we will render the raw text content. This ensures the user always sees a result.
+      if (generationType === 'Image' && isUrl(trimmedResult)) {
+        newItem = {
+            type: 'Image',
+            prompt: prompt,
+            url: trimmedResult,
         };
-        await addGeneratedItem(newItem);
-      } else if (result.text && typeof result.text === 'string') {
-        const newItem = {
-          type: 'Text' as const,
-          prompt: prompt,
-          url: `text:${result.text}`,
-        };
-        await addGeneratedItem(newItem);
-      } else if (result.json && typeof result.json === 'object') {
-        const newItem = {
-          type: 'Text' as const,
-          prompt: prompt,
-          url: `text:${JSON.stringify(result.json, null, 2)}`,
-        };
-        await addGeneratedItem(newItem);
       } else {
-        console.error("Webhook response was successful but format is not recognized.", result);
-        throw new Error('Invalid response from generation service.');
+        let content = trimmedResult;
+        if (!content) {
+            // Provide a helpful message for empty responses, which are common for async webhooks.
+            content = JSON.stringify({
+                status: "pending",
+                message: `Your ${generationType.toLowerCase()} generation request was received successfully and is being processed.`,
+                note: "This is a confirmation message. The result may appear later or be delivered via another method."
+            }, null, 2);
+        }
+
+        newItem = {
+            type: 'Text' as const,
+            prompt: `${generationType} request: "${prompt}"`,
+            url: `text:${content}`,
+        };
       }
+
+      await addGeneratedItem(newItem);
 
       setPrompt('');
       removeFile();
