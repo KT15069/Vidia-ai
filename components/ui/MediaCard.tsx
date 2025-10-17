@@ -4,6 +4,7 @@ import type { MediaItem } from '../../types';
 import { cardFadeIn } from '../../utils/animations';
 import { ImageIcon as ImgIcon, VideoIcon, StarIcon } from '../icons/Icons';
 import { useGeneration } from '../../context/GenerationContext';
+import CopyButton from './CopyButton';
 
 interface MediaCardProps {
   item: MediaItem;
@@ -23,7 +24,7 @@ const MediaCard: React.FC<MediaCardProps> = ({ item }) => {
   return (
     <motion.div
       variants={cardFadeIn}
-      className="group relative block overflow-hidden rounded-2xl cursor-pointer break-inside-avoid"
+      className="group relative block overflow-hidden rounded-2xl cursor-pointer"
     >
       {item.type === 'Video' ? (
         <motion.video
@@ -56,12 +57,15 @@ const MediaCard: React.FC<MediaCardProps> = ({ item }) => {
         <StarIcon className={`w-5 h-5 transition-colors ${item.isFavorite ? 'fill-yellow-400 stroke-yellow-400' : 'stroke-white'}`} />
       </button>
 
-      <div className="absolute bottom-0 left-0 p-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+      <div className="absolute bottom-0 left-0 right-0 p-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-500">
         <div className="flex items-center gap-2 mb-1">
           {item.type === 'Image' ? <ImgIcon className="w-4 h-4" /> : <VideoIcon className="w-4 h-4" />}
           <span className="text-sm font-semibold">{item.type}</span>
         </div>
-        <p className="text-sm text-neutral-300 line-clamp-2">{item.prompt}</p>
+        <div className="flex items-start justify-between gap-2">
+            <p className="text-sm text-neutral-300 line-clamp-2 flex-1">{item.prompt}</p>
+            <CopyButton textToCopy={item.prompt} className="flex-shrink-0" />
+        </div>
       </div>
     </motion.div>
   );

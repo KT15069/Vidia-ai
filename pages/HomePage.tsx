@@ -9,7 +9,7 @@ import TextCard from '../components/ui/TextCard';
 import { SparklesIcon } from '../components/icons/Icons';
 
 const EmptyStateWithBackground: React.FC = () => (
-    <div className="relative h-full overflow-hidden">
+    <div className="absolute inset-0 overflow-hidden">
         {/* Background Grid */}
         <motion.div
             variants={staggerContainer}
@@ -70,7 +70,7 @@ const HomePage: React.FC = () => {
               variants={staggerContainer}
               initial="hidden"
               animate="visible"
-              className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-4 space-y-4 p-4 sm:p-6 lg:p-8"
+              className="max-w-3xl mx-auto space-y-6"
           >
               {items.map((item) => (
                 item.type === 'Text' 
